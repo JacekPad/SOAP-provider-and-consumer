@@ -1,5 +1,6 @@
 package com.soap.tutorial.service;
 
+import com.soap.tutorial.mappers.SOAPResponseMapper;
 import com.soap.tutorial.model.Product.GetProductRequest;
 import com.soap.tutorial.model.Product.GetProductResponse;
 import com.soap.tutorial.model.Product.Product;
@@ -13,10 +14,12 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class ProductEndpoint {
     private ProductsService service;
+    private SOAPResponseMapper mapper;
 
     @Autowired
-    public ProductEndpoint(ProductsService service) {
+    public ProductEndpoint(ProductsService service, SOAPResponseMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PayloadRoot(namespace = "com/soap/tutorial/products", localPart = "getProductRequest")
@@ -25,18 +28,10 @@ public class ProductEndpoint {
         long id = request.getId();
         Products products = service.getProducts(id);
         GetProductResponse response = new GetProductResponse();
-        Product product = mapProducts(products);
+        Product product = mapper.mapToResponseProduct(products);
         response.setProduct(product);
         return response;
     }
 
-    private Product mapProducts(Products dbProduct) {
-        Product product = new Product();
-        product.setId(dbProduct.getId());
-        product.setName(dbProduct.getName());
-        product.setType(dbProduct.getType());
-        product.setQuantity(dbProduct.getQuantity());
-        product.setPrice(dbProduct.getPrice());
-        return product;
-    }
+
 }

@@ -11,7 +11,7 @@ import org.springframework.ws.soap.client.core.SoapActionCallback;
 public class ProductConsumer extends WebServiceGatewaySupport {
 
     public GetProductResponse getProduct(long id) {
-//        if many requests at the same time and many different requests - marshallers can override each other and get wrong .xsd
+//        if many requests at the same time and many marshaller types - marshallers can override each other and get wrong .xsd
 //        WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
         GetProductRequest request = new GetProductRequest();
         request.setId(id);
